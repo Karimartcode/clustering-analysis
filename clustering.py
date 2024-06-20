@@ -20,3 +20,12 @@ def run_kmeans(X, k):
     model = KMeans(n_clusters=k, random_state=42, n_init=10)
     labels = model.fit_predict(X)
     return labels, model
+
+
+def elbow_method(X, k_range=range(1, 11)):
+    inertias = []
+    for k in k_range:
+        model = KMeans(n_clusters=k, random_state=42, n_init=10)
+        model.fit(X)
+        inertias.append(model.inertia_)
+    return list(k_range), inertias
