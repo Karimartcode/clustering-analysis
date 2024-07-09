@@ -29,3 +29,18 @@ def elbow_method(X, k_range=range(1, 11)):
         model.fit(X)
         inertias.append(model.inertia_)
     return list(k_range), inertias
+
+
+from sklearn.metrics import silhouette_score
+
+def silhouette_analysis(X, k_range=range(2, 11)):
+    scores = []
+    for k in k_range:
+        labels, _ = run_kmeans(X, k)
+        score = silhouette_score(X, labels)
+        scores.append(score)
+    return list(k_range), scores
+
+
+def find_optimal_k(k_range, scores):
+    return k_range[np.argmax(scores)]
