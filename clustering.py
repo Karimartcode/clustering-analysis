@@ -44,3 +44,13 @@ def silhouette_analysis(X, k_range=range(2, 11)):
 
 def find_optimal_k(k_range, scores):
     return k_range[np.argmax(scores)]
+
+
+from sklearn.cluster import DBSCAN
+
+def run_dbscan(X, eps=0.5, min_samples=5):
+    model = DBSCAN(eps=eps, min_samples=min_samples)
+    labels = model.fit_predict(X)
+    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+    n_noise = list(labels).count(-1)
+    return labels, n_clusters, n_noise
