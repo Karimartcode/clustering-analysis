@@ -54,3 +54,18 @@ def run_dbscan(X, eps=0.5, min_samples=5):
     n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
     n_noise = list(labels).count(-1)
     return labels, n_clusters, n_noise
+
+
+def cluster_stats(X, labels):
+    stats = {}
+    for label in set(labels):
+        if label == -1:
+            continue
+        mask = labels == label
+        cluster_data = X[mask]
+        stats[label] = {
+            "size": int(np.sum(mask)),
+            "center": cluster_data.mean(axis=0).tolist(),
+            "std": cluster_data.std(axis=0).tolist()
+        }
+    return stats
