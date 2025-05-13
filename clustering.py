@@ -69,3 +69,42 @@ def cluster_stats(X, labels):
             "std": cluster_data.std(axis=0).tolist()
         }
     return stats
+
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+
+def plot_clusters(X, labels, title="Clusters", filename="clusters.png"):
+    plt.figure(figsize=(8, 6))
+    unique_labels = set(labels)
+    colors = plt.cm.Set1(np.linspace(0, 1, len(unique_labels)))
+    for label, color in zip(sorted(unique_labels), colors):
+        mask = labels == label
+        name = f"Cluster {label}" if label >= 0 else "Noise"
+        plt.scatter(X[mask, 0], X[mask, 1], c=[color], s=20, label=name, alpha=0.7)
+    plt.title(title)
+    plt.legend()
+    plt.savefig(filename)
+    plt.close()
+
+
+def plot_elbow(k_range, inertias, filename="elbow.png"):
+    plt.figure(figsize=(8, 4))
+    plt.plot(k_range, inertias, 'bo-')
+    plt.xlabel("k")
+    plt.ylabel("Inertia")
+    plt.title("Elbow Method")
+    plt.savefig(filename)
+    plt.close()
+
+
+def plot_silhouette(k_range, scores, filename="silhouette.png"):
+    plt.figure(figsize=(8, 4))
+    plt.plot(k_range, scores, 'go-')
+    plt.xlabel("k")
+    plt.ylabel("Silhouette Score")
+    plt.title("Silhouette Analysis")
+    plt.savefig(filename)
+    plt.close()
