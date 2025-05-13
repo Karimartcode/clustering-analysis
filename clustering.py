@@ -108,3 +108,26 @@ def plot_silhouette(k_range, scores, filename="silhouette.png"):
     plt.title("Silhouette Analysis")
     plt.savefig(filename)
     plt.close()
+
+
+def main():
+    X, y_true = generate_data()
+    X_scaled, _ = standardize(X)
+    k_range, inertias = elbow_method(X_scaled)
+    plot_elbow(k_range, inertias)
+    k_range_sil, scores = silhouette_analysis(X_scaled)
+    plot_silhouette(k_range_sil, scores)
+    optimal_k = find_optimal_k(k_range_sil, scores)
+    print(f"Optimal k: {optimal_k}")
+    km_labels, km_model = run_kmeans(X_scaled, optimal_k)
+    plot_clusters(X_scaled, km_labels, "K-Means", "kmeans.png")
+    db_labels, n_clusters, n_noise = run_dbscan(X_scaled, eps=0.5)
+    print(f"DBSCAN: {n_clusters} clusters, {n_noise} noise points")
+    plot_clusters(X_scaled, db_labels, "DBSCAN", "dbscan.png")
+    stats = cluster_stats(X_scaled, km_labels)
+    for label, s in stats.items():
+        print(f"  Cluster {label}: size={s['size']}")
+
+
+if __name__ == "__main__":
+    main()
